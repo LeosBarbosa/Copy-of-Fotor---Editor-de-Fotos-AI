@@ -4,10 +4,8 @@
 */
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-// CORREÇÃO: Substituindo '@/App' por './App' para garantir que o arquivo seja encontrado
-import App from './App';
-// Importação do CSS global, se existir (remova se não estiver usando)
-import './index.css'; 
+import App from './App'; // Importa App.tsx da mesma pasta (src)
+import './index.css'; // Certifique-se de mover o index.css para src também, se existir
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
