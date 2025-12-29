@@ -3,12 +3,10 @@ import { fileURLToPath } from 'url';
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// Correção necessária para __dirname funcionar em módulos ES (type: module)
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default defineConfig(({ mode }) => {
-    // Carrega variáveis de ambiente
     const env = loadEnv(mode, process.cwd(), '');
     
     return {
@@ -18,12 +16,11 @@ export default defineConfig(({ mode }) => {
       },
       plugins: [react()],
       define: {
-        'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY),
-        'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY)
+        'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY || env.API_KEY),
+        'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY || env.API_KEY)
       },
       resolve: {
         alias: {
-          // CORREÇÃO CRÍTICA: Aponta '@' para a pasta './src'
           '@': path.resolve(__dirname, './src'),
         }
       }

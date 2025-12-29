@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Download, Sparkles, Wand2, Edit, Settings2, ChevronDown, ChevronUp, Lightbulb, Info, AlertCircle, CheckCircle2, Square, RectangleHorizontal, RectangleVertical } from 'lucide-react';
 import { GoogleGenAI, Modality } from '@google/genai';
-import { AI_IMAGE_MODEL, AI_TEXT_MODEL } from '../../../config/constants';
+import { AI_IMAGE_MODEL, AI_TEXT_MODEL } from '../../../config/constants.ts';
 
 const AspectRatioButton: React.FC<{ label: string; value: string; icon: React.ElementType; active: boolean; onClick: (value: string) => void }> = ({ label, value, icon: Icon, active, onClick }) => (
     <button onClick={() => onClick(value)} className={`flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-lg border transition-all ${active ? 'bg-blue-600 text-white border-blue-500 shadow-lg shadow-blue-900/20' : 'bg-[#2a2d33] text-gray-400 border-gray-600 hover:bg-[#3a3d43] hover:text-gray-200'}`}>

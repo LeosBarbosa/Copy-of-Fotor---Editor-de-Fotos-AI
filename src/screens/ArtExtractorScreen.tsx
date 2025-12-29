@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { ArrowLeft, Download, Scissors, Edit, Loader, AlertCircle } from 'lucide-react';
-import { aiService } from '../services/aiService';
+import { aiService } from '../services/aiService.ts';
 
-// Fix: Defined props for ArtExtractorScreen component
 interface ArtExtractorScreenProps {
   onBack: () => void;
   onEdit: (imageUrl: string) => void;
@@ -14,23 +13,21 @@ export const ArtExtractorScreen: React.FC<ArtExtractorScreenProps> = ({ onBack, 
     const [processedImage, setProcessedImage] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
-    // Fix: Implemented handleExtractArt with proper aiService usage and prompt engineering
     const handleExtractArt = async () => {
         if (!initialImage) return;
         setIsProcessing(true);
         setError(null);
+        
         const prompt = `
-        ATUE COMO UM ESPECIALISTA EM PRÉ-IMPRESSÃO E DESIGN GRÁFICO.
-        OBJETIVO: Extrair e restaurar o design gráfico desta imagem para impressão profissional (DTF/Serigrafia).
+        TASK: GRAPHIC DESIGN EXTRACTION.
+        OBJECTIVE: Extract the graphic design from this product photo for professional DTF/Screen printing.
         
-        AÇÕES OBRIGATÓRIAS:
-        1. ISOLAMENTO: Remova completamente o fundo, o manequim, a pele humana e o tecido da camiseta. Mantenha APENAS a tinta/arte.
-        2. CORREÇÃO: Remova dobras, amassados e distorções de perspectiva causadas pelo tecido. A arte deve ficar plana (flat).
-        3. OTIMIZAÇÃO: Aumente o contraste e a saturação para cores vibrantes de impressão. Elimine ruído.
-        4. RESOLUÇÃO: Gere a saída em ultra-alta definição sobre fundo transparente (canal alfa estrito).
-        5. RESPEITO: Mantenha a tipografia e os traços originais com fidelidade absoluta. Não alucine novos elementos.
-        
-        Se houver texto, garanta que esteja legível e nítido.`;
+        REQUIRED ACTIONS:
+        1. ISOLATION: Completely remove the background, the mannequin, human skin, and the garment fabric. Keep ONLY the ink design/graphic art.
+        2. PERSPECTIVE: Remove wrinkles and perspective distortions caused by the fabric. The art must be flat.
+        3. TRANSPARENCY: Output the result as a high-definition PNG on a strictly transparent background (alpha channel).
+        4. FIDELITY: Maintain original typography, strokes, and colors with absolute accuracy. Do not add or hallucinate new elements.
+        `;
         
         try {
             const result = await aiService.generateImage({
@@ -47,59 +44,63 @@ export const ArtExtractorScreen: React.FC<ArtExtractorScreenProps> = ({ onBack, 
     };
 
     return (
-        <div className="flex flex-col h-screen bg-[#1F1F1F] text-white overflow-hidden">
-            <header className="flex-shrink-0 z-10 p-4 border-b border-gray-800 bg-[#2c2c2c]">
+        <div className="flex flex-col h-screen bg-[#111317] text-white overflow-hidden">
+            <header className="flex-shrink-0 z-10 p-4 border-b border-gray-800 bg-[#1a1c20]">
                 <div className="flex items-center gap-4">
                     <button onClick={onBack} className="p-2 rounded-full hover:bg-gray-700 transition-colors">
                         <ArrowLeft size={20} />
                     </button>
-                    <h1 className="font-semibold text-lg">Extrator de Arte Profissional</h1>
+                    <h1 className="font-semibold text-lg">Extrator de Estampa DTF</h1>
                 </div>
             </header>
 
-            <main className="flex-1 min-h-0 flex flex-col items-center justify-center p-4">
+            <main className="flex-1 min-h-0 flex flex-col items-center justify-center p-6 bg-checkered">
                 {isProcessing ? (
-                    <div className="text-center">
+                    <div className="text-center p-12 bg-[#1a1c20] rounded-2xl border border-gray-800 shadow-2xl">
                         <Loader className="animate-spin h-12 w-12 text-blue-500 mx-auto mb-4" />
-                        <p className="font-semibold text-gray-300">Isolando e restaurando design...</p>
+                        <p className="font-bold text-xl mb-2">Processando Design...</p>
+                        <p className="text-gray-400 text-sm">Isolando a arte das fibras do tecido e corrigindo perspectiva.</p>
                     </div>
                 ) : processedImage ? (
-                    <div className="w-full h-full flex flex-col items-center justify-center gap-4">
-                         <div className="relative max-w-full max-h-[70vh] bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] rounded-lg overflow-hidden border border-gray-700">
-                             <img src={processedImage} alt="Arte Extraída" className="max-w-full max-h-full object-contain"/>
+                    <div className="w-full h-full flex flex-col items-center justify-center gap-6">
+                         <div className="relative max-w-full max-h-[65vh] p-8 bg-[#1a1c20]/50 rounded-2xl border border-gray-700 shadow-2xl overflow-auto">
+                             <img src={processedImage} alt="Arte Extraída" className="max-w-full h-auto object-contain mx-auto drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]"/>
                          </div>
-                         <div className="flex gap-4">
-                             <button onClick={() => onEdit(processedImage)} className="bg-gray-700 px-6 py-2 rounded-lg flex items-center gap-2 hover:bg-gray-600 transition-colors">
+                         <div className="flex flex-wrap justify-center gap-4">
+                             <button onClick={() => onEdit(processedImage)} className="bg-gray-700 px-8 py-3 rounded-xl flex items-center gap-2 hover:bg-gray-600 transition-all font-semibold">
                                  <Edit size={18} /> Continuar Editando
                              </button>
                              <button onClick={() => {
                                  const link = document.createElement('a');
                                  link.href = processedImage;
-                                 link.download = `arte-extraida-${Date.now()}.png`;
+                                 link.download = `estampa-dtf-${Date.now()}.png`;
                                  link.click();
-                             }} className="bg-blue-600 px-6 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700 transition-colors font-bold">
+                             }} className="bg-blue-600 px-8 py-3 rounded-xl flex items-center gap-2 hover:bg-blue-700 transition-all font-bold shadow-lg shadow-blue-900/20">
                                  <Download size={18} /> Baixar PNG Transparente
                              </button>
                          </div>
                     </div>
                 ) : (
-                    <div className="text-center max-w-lg p-8 bg-[#2c2c2c] rounded-2xl border border-gray-800">
-                        <Scissors size={48} className="mx-auto text-blue-400 mb-4" />
-                        <h2 className="text-2xl font-bold mb-4">Extrator de Estampas IA</h2>
-                        <p className="text-gray-400 mb-8">Extraia logos e artes de fotos de camisetas ou produtos. Ideal para restaurar designs antigos para novas impressões.</p>
+                    <div className="text-center max-w-lg p-10 bg-[#1a1c20] rounded-3xl border border-gray-800 shadow-2xl">
+                        <div className="w-20 h-20 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-6 ring-1 ring-blue-500/30">
+                            <Scissors size={40} className="text-blue-400" />
+                        </div>
+                        <h2 className="text-3xl font-black mb-4 tracking-tight">Converter Camiseta em Arte</h2>
+                        <p className="text-gray-400 mb-8 leading-relaxed">Extraia logos e estampas de fotos reais para arquivos de impressão limpos. Perfeito para restaurar designs ou criar arquivos fonte para DTF.</p>
+                        
                         {initialImage ? (
                             <div className="space-y-6">
-                                <div className="relative group">
-                                    <img src={initialImage} alt="Original" className="max-h-48 mx-auto rounded-lg border border-gray-700" />
-                                    <div className="absolute inset-0 bg-blue-600/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg pointer-events-none"></div>
+                                <div className="relative group max-w-[200px] mx-auto">
+                                    <img src={initialImage} alt="Original" className="w-full h-auto rounded-xl border border-gray-700 shadow-md" />
+                                    <div className="absolute inset-0 bg-blue-600/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl pointer-events-none"></div>
                                 </div>
-                                <button onClick={handleExtractArt} className="bg-blue-600 px-8 py-3 rounded-full font-bold hover:bg-blue-700 transition-all transform hover:scale-105 w-full shadow-lg shadow-blue-900/20">
-                                    Extrair Arte Profissional
+                                <button onClick={handleExtractArt} className="bg-blue-600 px-10 py-4 rounded-2xl font-bold text-lg hover:bg-blue-700 transition-all transform hover:scale-105 w-full shadow-lg shadow-blue-900/40">
+                                    EXTRAIR AGORA
                                 </button>
                             </div>
                         ) : (
-                            <div className="p-4 bg-yellow-900/10 border border-yellow-900/30 rounded-lg">
-                                <p className="text-yellow-500 text-sm italic">Por favor, carregue uma imagem no editor primeiro para usar esta ferramenta.</p>
+                            <div className="p-6 bg-blue-500/5 border border-blue-500/20 rounded-2xl">
+                                <p className="text-blue-400 text-sm font-medium">Por favor, carregue uma imagem no editor primeiro para usar esta ferramenta.</p>
                             </div>
                         )}
                     </div>

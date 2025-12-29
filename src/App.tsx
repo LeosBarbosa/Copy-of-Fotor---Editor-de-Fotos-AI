@@ -1,42 +1,39 @@
-
 import React from 'react';
 import { BrowserRouter, Routes, Route, useNavigate, useParams, Navigate } from 'react-router-dom';
-import EditorInterface from './components/EditorInterface';
-import { EditorProvider, useEditor } from './contexts/EditorContext';
+import EditorInterface from './components/EditorInterface.tsx';
+import { EditorProvider, useEditor } from './contexts/EditorContext.tsx';
 
-// Import screens
-import { UpscalerScreen } from './screens/UpscalerScreen';
-import { PortraitScreen } from './screens/features/portrait/PortraitScreen';
-import { NoiseRemoverScreen } from './screens/NoiseRemoverScreen';
-import { ColorizeScreen } from './screens/ColorizeScreen';
-import { ImageGeneratorScreen } from './screens/features/image-gen/ImageGeneratorScreen';
-import { OneTapEnhanceScreen } from './screens/OneTapEnhanceScreen';
-import { BackgroundRemoverScreen } from './screens/BackgroundRemoverScreen';
-import { AiSkinRetouchScreen } from './screens/AiSkinRetouchScreen';
-import { MagicEraserScreen } from './screens/MagicEraserScreen';
-import { FaceBlurScreen } from './screens/FaceBlurScreen';
-import { WatermarkRemoverScreen } from './screens/WatermarkRemoverScreen';
-import { BackgroundBlurScreen } from './screens/BackgroundBlurScreen';
-import { ChangeBackgroundScreen } from './screens/ChangeBackgroundScreen';
-import { OldPhotoRestorerScreen } from './screens/OldPhotoRestorerScreen';
-import { OcrScreen } from './screens/OcrScreen';
-import { HeadshotScreen } from './screens/HeadshotScreen';
-import { ImageExpandScreen } from './screens/ImageExpandScreen';
-import { AiReplaceScreen } from './screens/AiReplaceScreen';
-import { AiBackgroundScreen } from './screens/AiBackgroundScreen';
-import { VirtualTattooScreen } from './screens/VirtualTattooScreen';
-import { Upcoming2026Screen } from './screens/Upcoming2026Screen';
-import { CinematicPortraitScreen } from './screens/CinematicPortraitScreen';
-import { AiMagicEditScreen } from './screens/AiMagicEditScreen';
-import { ImageAnalysisScreen } from './screens/ImageAnalysisScreen';
-import { ColoringBookScreen } from './screens/ColoringBookScreen';
-import { LifestyleSceneScreen } from './screens/LifestyleSceneScreen';
-import { FutureFamilyScreen } from './screens/FutureFamilyScreen';
-import AiMoviePosterScreen from './screens/AiMoviePosterScreen';
-// Fix: Added missing import for ArtExtractorScreen to resolve "Cannot find name 'ArtExtractorScreen'" error on line 88
-import { ArtExtractorScreen } from './screens/ArtExtractorScreen';
+// Import screens with explicit extensions for browser compatibility
+import { UpscalerScreen } from './screens/UpscalerScreen.tsx';
+import { PortraitScreen } from './screens/features/portrait/PortraitScreen.tsx';
+import { NoiseRemoverScreen } from './screens/NoiseRemoverScreen.tsx';
+import { ColorizeScreen } from './screens/ColorizeScreen.tsx';
+import { ImageGeneratorScreen } from './screens/features/image-gen/ImageGeneratorScreen.tsx';
+import { OneTapEnhanceScreen } from './screens/OneTapEnhanceScreen.tsx';
+import { BackgroundRemoverScreen } from './screens/BackgroundRemoverScreen.tsx';
+import { AiSkinRetouchScreen } from './screens/AiSkinRetouchScreen.tsx';
+import { MagicEraserScreen } from './screens/MagicEraserScreen.tsx';
+import { FaceBlurScreen } from './screens/FaceBlurScreen.tsx';
+import { WatermarkRemoverScreen } from './screens/WatermarkRemoverScreen.tsx';
+import { BackgroundBlurScreen } from './screens/BackgroundBlurScreen.tsx';
+import { ChangeBackgroundScreen } from './screens/ChangeBackgroundScreen.tsx';
+import { OldPhotoRestorerScreen } from './screens/OldPhotoRestorerScreen.tsx';
+import { OcrScreen } from './screens/OcrScreen.tsx';
+import { HeadshotScreen } from './screens/HeadshotScreen.tsx';
+import { ImageExpandScreen } from './screens/ImageExpandScreen.tsx';
+import { AiReplaceScreen } from './screens/AiReplaceScreen.tsx';
+import { AiBackgroundScreen } from './screens/AiBackgroundScreen.tsx';
+import { VirtualTattooScreen } from './screens/VirtualTattooScreen.tsx';
+import { Upcoming2026Screen } from './screens/Upcoming2026Screen.tsx';
+import { CinematicPortraitScreen } from './screens/CinematicPortraitScreen.tsx';
+import { AiMagicEditScreen } from './screens/AiMagicEditScreen.tsx';
+import { ImageAnalysisScreen } from './screens/ImageAnalysisScreen.tsx';
+import { ColoringBookScreen } from './screens/ColoringBookScreen.tsx';
+import { LifestyleSceneScreen } from './screens/LifestyleSceneScreen.tsx';
+import { FutureFamilyScreen } from './screens/FutureFamilyScreen.tsx';
+import AiMoviePosterScreen from './screens/AiMoviePosterScreen.tsx';
+import { ArtExtractorScreen } from './screens/ArtExtractorScreen.tsx';
 
-// Wrapper component to handle routing logic for tools
 const ToolRouteHandler: React.FC = () => {
     const { toolId } = useParams<{ toolId: string }>();
     const navigate = useNavigate();
@@ -45,18 +42,9 @@ const ToolRouteHandler: React.FC = () => {
     const handleBack = () => navigate('/');
     
     const handleEditComplete = (imageUrl: string) => {
-        addToHistory(imageUrl); // Save to history directly
+        addToHistory(imageUrl);
         navigate('/');
     };
-
-    // Tools that don't necessarily require an existing image in the editor (Generators)
-    const standaloneTools = ['ai-image-generator', 'future-family', 'ai-movie-poster'];
-    
-    // If no image is loaded and tool is not standalone, redirect to home
-    if (!image && !standaloneTools.includes(toolId || '')) {
-        // Optional: You could redirect to a specific upload page, but for now home is safer
-        // return <Navigate to="/" replace />;
-    }
 
     switch (toolId) {
         case 'ai-magic-edit': return <AiMagicEditScreen onBack={handleBack} onEdit={handleEditComplete} initialImage={image} />;
@@ -65,7 +53,7 @@ const ToolRouteHandler: React.FC = () => {
         case 'one-tap-enhance': return <OneTapEnhanceScreen onBack={handleBack} onEdit={handleEditComplete} initialImage={image} />;
         case 'bg-remover': return <BackgroundRemoverScreen onBack={handleBack} onEdit={handleEditComplete} initialImage={image} />;
         case 'ai-upscaler': return <UpscalerScreen onBack={handleBack} onEdit={handleEditComplete} initialImage={image} />;
-        case 'ai-portrait': return <PortraitScreen onBack={handleBack} initialImage={image} />; // Portrait handles its own saving/flow usually
+        case 'ai-portrait': return <PortraitScreen onBack={handleBack} initialImage={image} />;
         case 'ai-noise-remover': return <NoiseRemoverScreen onBack={handleBack} onEdit={handleEditComplete} />;
         case 'colorize': return <ColorizeScreen onBack={handleBack} onEdit={handleEditComplete} />;
         case 'ai-skin-retouch': return <AiSkinRetouchScreen onBack={handleBack} onEdit={handleEditComplete} />;
@@ -87,7 +75,6 @@ const ToolRouteHandler: React.FC = () => {
         case 'lifestyle-scene': return <LifestyleSceneScreen onBack={handleBack} onEdit={handleEditComplete} initialImage={image} />;
         case 'future-family': return <FutureFamilyScreen onBack={handleBack} onEdit={handleEditComplete} />;
         case 'ai-movie-poster': return <AiMoviePosterScreen onBack={handleBack} onEdit={handleEditComplete} />;
-        // Fix: Properly handle art-extractor case on line 88 with ArtExtractorScreen
         case 'art-extractor': return <ArtExtractorScreen onBack={handleBack} onEdit={handleEditComplete} initialImage={image} />;
         default: return <Navigate to="/" replace />;
     }

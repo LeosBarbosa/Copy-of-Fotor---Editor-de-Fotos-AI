@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ArrowLeft, Check, Upload, Download, RefreshCw, Sliders, Users, ImageIcon, CheckSquare, Square, AlertCircle } from 'lucide-react';
-import { portraitStyles, portraitPrompts } from '../../../data/portraitStyles';
-import { fileToBlobUrl } from '../../../utils/fileUtils';
-import { useAiGeneration } from '../../../hooks/useAiGeneration';
+import { portraitStyles, portraitPrompts } from '../../../data/portraitStyles.ts';
+import { fileToBlobUrl } from '../../../utils/fileUtils.ts';
+import { useAiGeneration } from '../../../hooks/useAiGeneration.ts';
 
 const styleCategories = ['Todos', 'Estúdio', 'Externo', 'Criativo'];
 
@@ -165,7 +165,7 @@ export const PortraitScreen: React.FC<{ onBack: () => void; initialImage?: strin
             {step < 3 && (
                 <div className="p-6 bg-[#111317] border-t border-gray-800 flex justify-center">
                     {step === 1 && (
-                        <button onClick={() => setStep(2)} disabled={!selectedStyle} className="w-full max-w-xs bg-blue-600 py-4 rounded-xl font-bold disabled:opacity-30 shadow-lg shadow-blue-900/20">Continuar para Upload</button>
+                        <button onClick={() => setStep(2)} disabled={!selectedStyle} className="w-full max-w-xs bg-blue-600 py-4 rounded-xl font-bold disabled:opacity-30 disabled:cursor-not-allowed shadow-lg shadow-blue-900/20">Continuar para Upload</button>
                     )}
                     {step === 2 && (
                         <button onClick={handleGenerateClick} disabled={!uploadedImage || isGenerating} className="w-full max-w-xs bg-gradient-to-r from-blue-600 to-indigo-600 py-4 rounded-xl font-bold disabled:opacity-30 flex items-center justify-center gap-3">
