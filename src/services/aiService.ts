@@ -30,6 +30,8 @@ export const aiService = {
             parts.push({ text: finalPrompt });
 
             const ai = new GoogleGenAI({ apiKey: API_KEY });
+            
+            // Se o modelo solicitado for o Pro, garantimos o uso do gemini-3-pro-image-preview
             const modelToUse = model.includes('pro') ? AI_IMAGE_PRO_MODEL : AI_IMAGE_MODEL;
 
             const response = await ai.models.generateContent({
@@ -39,15 +41,19 @@ export const aiService = {
             });
 
             const candidate = response.candidates?.[0];
-            if (!candidate) throw new Error("IA não retornou resultados.");
+            if (!candidate) throw new Error("A IA não retornou resultados.");
 
             const imagePart = candidate.content.parts.find(p => p.inlineData);
             if (imagePart?.inlineData) {
                 return `data:${imagePart.inlineData.mimeType};base64,${imagePart.inlineData.data}`;
             }
+
+            const textResponse = candidate.content.parts.find(p => p.text)?.text;
+            if (textResponse) throw new Error(`IA recusou: ${textResponse}`);
             
-            throw new Error("Falha ao processar imagem.");
+            throw new Error("Falha ao gerar imagem.");
         } catch (error: any) {
+            console.error("AI Error:", error);
             throw new Error(error.message || "Erro na conexão com Google AI.");
         }
     }

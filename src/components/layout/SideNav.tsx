@@ -8,11 +8,9 @@ const navItems: NavItemType[] = [
     { id: 'ajustar', label: 'Ajustar', icon: Settings },
     { id: 'efeitos', label: 'Efeitos', icon: Wand },
     { id: 'beleza', label: 'Beleza', icon: Eye },
-    { id: 'quadros', label: 'Quadros', icon: Frame },
     { id: 'texto', label: 'Texto', icon: Type },
     { id: 'elementos', label: 'Elementos', icon: Shapes },
     { id: 'uploads', label: 'Uploads', icon: Upload },
-    { id: 'mais', label: 'Mais', icon: MoreHorizontal }
 ];
 
 interface SideNavProps {
@@ -22,53 +20,22 @@ interface SideNavProps {
 
 export const SideNav: React.FC<SideNavProps> = ({ activeNav, setActiveNav }) => {
     return (
-        <nav className="
-            flex flex-row md:flex-col 
-            w-full md:w-20 
-            h-16 md:h-auto 
-            bg-[#212121]/95 md:bg-[#212121]/80 backdrop-blur-md 
-            flex-shrink-0 z-30 
-            md:rounded-xl shadow-2xl 
-            overflow-x-auto md:overflow-visible
-            border-t md:border-t-0 border-gray-700/50
-        ">
-            <div className="flex md:flex-col w-full min-w-max md:min-w-0">
+        <nav className="fixed bottom-0 left-0 w-full h-16 bg-[#111317]/95 backdrop-blur-xl border-t border-gray-800 md:relative md:w-20 md:h-full md:border-t-0 md:border-r z-40">
+            <div className="flex md:flex-col h-full items-center justify-around md:justify-start md:pt-4">
                 {navItems.map((item) => (
                     <button
                         key={item.id}
                         onClick={() => setActiveNav(item.id)}
-                        className={`
-                            relative flex flex-col items-center justify-center 
-                            p-1 md:p-2 
-                            h-16 md:h-16 
-                            min-w-[4.5rem] md:w-full 
-                            transition-colors duration-200 
-                            ${activeNav === item.id ? 'bg-[#2c2c2c]/80' : 'hover:bg-gray-700/50'}
-                        `}
+                        className={`relative flex flex-col items-center justify-center p-2 md:w-full md:h-16 transition-all duration-300 ${
+                            activeNav === item.id ? 'text-blue-400' : 'text-gray-500 hover:text-gray-300'
+                        }`}
                         aria-label={item.label}
-                        aria-current={activeNav === item.id}
                     >
-                        {/* Active Indicator: Left border on Desktop, Top border on Mobile */}
                         {activeNav === item.id && (
-                            <div className="
-                                absolute 
-                                md:left-0 md:top-1/2 md:-translate-y-1/2 md:w-1 md:h-8 md:rounded-r-full 
-                                top-0 left-1/2 -translate-x-1/2 w-8 h-1 rounded-b-full
-                                bg-blue-500
-                            "></div>
+                            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-1 bg-blue-500 rounded-b-full md:top-1/2 md:left-0 md:w-1 md:h-8 md:translate-x-0 md:-translate-y-1/2 md:rounded-r-full"></div>
                         )}
-                        
-                        <item.icon 
-                            size={22} 
-                            className={`
-                                mb-1 
-                                transition-all duration-200 
-                                ${activeNav === item.id ? 'text-blue-400 [filter:drop-shadow(0_0_3px_rgba(96,165,250,0.5))]' : 'text-gray-400'}
-                            `} 
-                        />
-                        <span className={`text-[9px] md:text-[10px] ${activeNav === item.id ? 'text-white font-semibold' : 'text-gray-400'}`}>
-                            {item.label}
-                        </span>
+                        <item.icon size={22} className={`${activeNav === item.id ? 'drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]' : ''}`} />
+                        <span className="text-[9px] mt-1 font-bold md:hidden lg:block">{item.label}</span>
                     </button>
                 ))}
             </div>
