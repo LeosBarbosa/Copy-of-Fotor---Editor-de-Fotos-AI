@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, useNavigate, useParams, Navigate } from '
 import EditorInterface from './components/EditorInterface';
 import { EditorProvider, useEditor } from './contexts/EditorContext';
 
-// Import screens usando caminhos relativos diretos
+// Import screens usando caminhos relativos baseados na raiz
 import { UpscalerScreen } from './screens/UpscalerScreen';
 import { PortraitScreen } from './screens/features/portrait/PortraitScreen';
 import { NoiseRemoverScreen } from './screens/NoiseRemoverScreen';
