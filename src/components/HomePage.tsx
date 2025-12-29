@@ -1,9 +1,10 @@
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { tools } from '../config/tools'; // Ensure this exists, or I will mock it
-import { SparkleIcon } from './icons'; // Ensure this exists
+import { tools } from '../config/tools';
+import { SparkleIcon } from './icons';
 
-// Define an interface for the tool objects to fix 'unknown' type errors
+// Fix: Defined Tool interface to ensure type safety for configuration objects
 interface Tool {
   title: string;
   description: string;
@@ -12,37 +13,45 @@ interface Tool {
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
+  // Fix: Cast tools to Record<string, Tool> to avoid 'unknown' type errors during property access
+  const toolsMap = tools as Record<string, Tool>;
 
   return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold mb-6 flex items-center gap-2">
-        <SparkleIcon className="w-8 h-8 text-purple-500" />
-        AI Photo Editor
+    <div className="p-8 max-w-7xl mx-auto">
+      <h1 className="text-4xl font-black mb-8 flex items-center gap-3 tracking-tighter uppercase">
+        <SparkleIcon className="w-10 h-10 text-blue-500 drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]" />
+        Editor de Fotos IA
       </h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* Helper to map tools if they exist, or show placeholders */}
-        {/* Fix: Added type casting and capitalized variable for the component to fix 'unknown' property access and JSX tag errors */}
-        {Object.entries(tools || {}).map(([id, t]) => {
-          const tool = t as Tool;
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {/* Fix: Explicitly cast entries and iteration item to Tool type to resolve property access errors on lines 24-28 */}
+        {(Object.entries(toolsMap || {}) as [string, Tool][]).map(([id, tool]) => {
+          // Fix: Extract icon and capitalize to use as a valid React component tag
           const ToolIcon = tool.icon;
           return (
             <button
               key={id}
               onClick={() => navigate(`/tool/${id}`)}
-              className="p-6 bg-gray-800 rounded-xl hover:bg-gray-700 transition-all flex flex-col items-center gap-4 border border-gray-700 hover:border-purple-500/50"
+              className="group p-6 bg-[#1a1c20] rounded-2xl hover:bg-[#2a2d33] transition-all flex flex-col items-center gap-5 border border-gray-800 hover:border-blue-500/50 shadow-xl"
             >
-              <div className="p-4 bg-gray-900 rounded-full">
-                {ToolIcon ? <ToolIcon className="w-8 h-8 text-purple-400" /> : <SparkleIcon className="w-8 h-8 text-purple-400" />}
+              <div className="p-5 bg-[#111317] rounded-full group-hover:scale-110 transition-transform">
+                {ToolIcon ? (
+                    <ToolIcon className="w-8 h-8 text-blue-400 group-hover:text-blue-300 transition-colors" />
+                ) : (
+                    <SparkleIcon className="w-8 h-8 text-blue-400 group-hover:text-blue-300 transition-colors" />
+                )}
               </div>
               <div className="text-center">
-                <h3 className="font-semibold text-lg">{tool.title}</h3>
-                <p className="text-sm text-gray-400 mt-1">{tool.description}</p>
+                {/* Fix: Access title and description properties after proper type casting */}
+                <h3 className="font-bold text-lg text-white group-hover:text-blue-400 transition-colors">{tool.title}</h3>
+                <p className="text-sm text-gray-500 mt-2 line-clamp-2">{tool.description}</p>
               </div>
             </button>
           );
         })}
-        {(!tools || Object.keys(tools).length === 0) && (
-            <p className="text-gray-400">No tools configuration found. Please check src/config/tools.ts</p>
+        {(!toolsMap || Object.keys(toolsMap).length === 0) && (
+            <div className="col-span-full py-20 text-center">
+                <p className="text-gray-600 font-medium italic">Nenhuma ferramenta de IA configurada. Verifique src/config/tools.ts</p>
+            </div>
         )}
       </div>
     </div>

@@ -1,10 +1,9 @@
-
 import React from 'react';
 import { BrowserRouter, Routes, Route, useNavigate, useParams, Navigate } from 'react-router-dom';
 import EditorInterface from './components/EditorInterface';
 import { EditorProvider, useEditor } from './contexts/EditorContext';
 
-// Import screens
+// Import screens usando caminhos relativos limpos
 import { UpscalerScreen } from './screens/UpscalerScreen';
 import { PortraitScreen } from './screens/features/portrait/PortraitScreen';
 import { NoiseRemoverScreen } from './screens/NoiseRemoverScreen';
@@ -33,28 +32,19 @@ import { ColoringBookScreen } from './screens/ColoringBookScreen';
 import { LifestyleSceneScreen } from './screens/LifestyleSceneScreen';
 import { FutureFamilyScreen } from './screens/FutureFamilyScreen';
 import AiMoviePosterScreen from './screens/AiMoviePosterScreen';
+import { ArtExtractorScreen } from './screens/ArtExtractorScreen';
 
-// Wrapper component to handle routing logic for tools
 const ToolRouteHandler: React.FC = () => {
     const { toolId } = useParams<{ toolId: string }>();
     const navigate = useNavigate();
-    const { image, setImage, addToHistory } = useEditor();
+    const { image, addToHistory } = useEditor();
 
     const handleBack = () => navigate('/');
     
     const handleEditComplete = (imageUrl: string) => {
-        addToHistory(imageUrl); // Save to history directly
+        addToHistory(imageUrl);
         navigate('/');
     };
-
-    // Tools that don't necessarily require an existing image in the editor (Generators)
-    const standaloneTools = ['ai-image-generator', 'future-family', 'ai-movie-poster'];
-    
-    // If no image is loaded and tool is not standalone, redirect to home
-    if (!image && !standaloneTools.includes(toolId || '')) {
-        // Optional: You could redirect to a specific upload page, but for now home is safer
-        // return <Navigate to="/" replace />;
-    }
 
     switch (toolId) {
         case 'ai-magic-edit': return <AiMagicEditScreen onBack={handleBack} onEdit={handleEditComplete} initialImage={image} />;
@@ -63,7 +53,7 @@ const ToolRouteHandler: React.FC = () => {
         case 'one-tap-enhance': return <OneTapEnhanceScreen onBack={handleBack} onEdit={handleEditComplete} initialImage={image} />;
         case 'bg-remover': return <BackgroundRemoverScreen onBack={handleBack} onEdit={handleEditComplete} initialImage={image} />;
         case 'ai-upscaler': return <UpscalerScreen onBack={handleBack} onEdit={handleEditComplete} initialImage={image} />;
-        case 'ai-portrait': return <PortraitScreen onBack={handleBack} initialImage={image} />; // Portrait handles its own saving/flow usually
+        case 'ai-portrait': return <PortraitScreen onBack={handleBack} initialImage={image} />;
         case 'ai-noise-remover': return <NoiseRemoverScreen onBack={handleBack} onEdit={handleEditComplete} />;
         case 'colorize': return <ColorizeScreen onBack={handleBack} onEdit={handleEditComplete} />;
         case 'ai-skin-retouch': return <AiSkinRetouchScreen onBack={handleBack} onEdit={handleEditComplete} />;
@@ -85,6 +75,7 @@ const ToolRouteHandler: React.FC = () => {
         case 'lifestyle-scene': return <LifestyleSceneScreen onBack={handleBack} onEdit={handleEditComplete} initialImage={image} />;
         case 'future-family': return <FutureFamilyScreen onBack={handleBack} onEdit={handleEditComplete} />;
         case 'ai-movie-poster': return <AiMoviePosterScreen onBack={handleBack} onEdit={handleEditComplete} />;
+        case 'art-extractor': return <ArtExtractorScreen onBack={handleBack} onEdit={handleEditComplete} initialImage={image} />;
         default: return <Navigate to="/" replace />;
     }
 };

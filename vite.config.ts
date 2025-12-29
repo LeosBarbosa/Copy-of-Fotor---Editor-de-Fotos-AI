@@ -16,7 +16,8 @@ export default defineConfig(({ mode }) => {
       },
       resolve: {
         alias: {
-          '@': path.resolve(__dirname, '.'),
+          // Garante que '@' aponte para a pasta 'src'
+          '@': path.resolve(__dirname, './src'),
         }
       }
     };

@@ -1,22 +1,23 @@
-
 import { GoogleGenAI, Modality } from '@google/genai';
 import { imageUrlToBase64 } from '../utils/fileUtils';
 import { AI_IMAGE_MODEL, AI_IMAGE_PRO_MODEL } from '../config/constants';
 
-const API_KEY = process.env.API_KEY;
-
-interface GenerationOptions {
-    model?: string;
-    prompt: string;
-    image: string;
-    additionalImages?: string[];
-    systemInstruction?: string;
-}
-
 export const aiService = {
-    generateImage: async ({ model = AI_IMAGE_MODEL, prompt, image, additionalImages = [], systemInstruction }: GenerationOptions): Promise<string> => {
-        if (!API_KEY) throw new Error("Chave de API não configurada.");
-
+    generateImage: async ({ 
+        model = AI_IMAGE_MODEL, 
+        prompt, 
+        image, 
+        additionalImages = [], 
+        systemInstruction 
+    }: {
+        model?: string;
+        prompt: string;
+        image: string;
+        additionalImages?: string[];
+        systemInstruction?: string;
+    }): Promise<string> => {
+        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+        
         try {
             const { base64: mainBase64, mimeType: mainMime } = await imageUrlToBase64(image);
             const parts: any[] = [{ inlineData: { data: mainBase64, mimeType: mainMime } }];
@@ -29,26 +30,21 @@ export const aiService = {
             const finalPrompt = systemInstruction ? `${systemInstruction}\n\n${prompt}` : prompt;
             parts.push({ text: finalPrompt });
 
-            const ai = new GoogleGenAI({ apiKey: API_KEY });
-            const modelToUse = model.includes('pro') ? AI_IMAGE_PRO_MODEL : AI_IMAGE_MODEL;
-
             const response = await ai.models.generateContent({
-                model: modelToUse,
+                model: model.includes('pro') ? AI_IMAGE_PRO_MODEL : model,
                 contents: { parts },
                 config: { responseModalities: [Modality.IMAGE] },
             });
 
-            const candidate = response.candidates?.[0];
-            if (!candidate) throw new Error("IA não retornou resultados.");
-
-            const imagePart = candidate.content.parts.find(p => p.inlineData);
+            const imagePart = response.candidates?.[0]?.content?.parts.find(p => p.inlineData);
             if (imagePart?.inlineData) {
                 return `data:${imagePart.inlineData.mimeType};base64,${imagePart.inlineData.data}`;
             }
-            
-            throw new Error("Falha ao processar imagem.");
+
+            throw new Error("A IA não retornou uma imagem válida.");
         } catch (error: any) {
-            throw new Error(error.message || "Erro na conexão com Google AI.");
+            console.error("AI Generation Error:", error);
+            throw new Error(error.message || "Falha na conexão com o servidor de IA.");
         }
     }
 };

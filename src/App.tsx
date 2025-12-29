@@ -33,12 +33,14 @@ import { ColoringBookScreen } from './screens/ColoringBookScreen';
 import { LifestyleSceneScreen } from './screens/LifestyleSceneScreen';
 import { FutureFamilyScreen } from './screens/FutureFamilyScreen';
 import AiMoviePosterScreen from './screens/AiMoviePosterScreen';
+// Fix: Added missing import for ArtExtractorScreen to resolve "Cannot find name 'ArtExtractorScreen'" error on line 88
+import { ArtExtractorScreen } from './screens/ArtExtractorScreen';
 
 // Wrapper component to handle routing logic for tools
 const ToolRouteHandler: React.FC = () => {
     const { toolId } = useParams<{ toolId: string }>();
     const navigate = useNavigate();
-    const { image, setImage, addToHistory } = useEditor();
+    const { image, addToHistory } = useEditor();
 
     const handleBack = () => navigate('/');
     
@@ -85,6 +87,8 @@ const ToolRouteHandler: React.FC = () => {
         case 'lifestyle-scene': return <LifestyleSceneScreen onBack={handleBack} onEdit={handleEditComplete} initialImage={image} />;
         case 'future-family': return <FutureFamilyScreen onBack={handleBack} onEdit={handleEditComplete} />;
         case 'ai-movie-poster': return <AiMoviePosterScreen onBack={handleBack} onEdit={handleEditComplete} />;
+        // Fix: Properly handle art-extractor case on line 88 with ArtExtractorScreen
+        case 'art-extractor': return <ArtExtractorScreen onBack={handleBack} onEdit={handleEditComplete} initialImage={image} />;
         default: return <Navigate to="/" replace />;
     }
 };

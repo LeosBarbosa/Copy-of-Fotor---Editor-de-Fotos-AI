@@ -1,4 +1,3 @@
-
 import { useState, useCallback } from 'react';
 import { aiService } from '../services/aiService';
 import { fileToBlobUrl } from '../utils/fileUtils';
@@ -34,10 +33,8 @@ export const useAiGeneration = (initialImage: string | null = null): UseAiGenera
         setIsProcessing(false);
     }, []);
 
-    const generate = useCallback(async (prompt: string, options: { model?: string, additionalImages?: string[], systemInstruction?: string, imageOverride?: string } = {}) => {
-        // Permite que uma ferramenta substitua a imagem principal (ex: Stitch usa o template como base)
+    const generate = useCallback(async (prompt: string, options: any = {}) => {
         const imgToUse = options.imageOverride || originalImage;
-
         if (!imgToUse) {
             setError("Nenhuma imagem selecionada.");
             return;
@@ -57,21 +54,11 @@ export const useAiGeneration = (initialImage: string | null = null): UseAiGenera
             setProcessedImage(resultUrl);
             return resultUrl;
         } catch (err: any) {
-            console.error("Hook Generation Error:", err);
-            setError(err.message || "Falha na geração da imagem.");
+            setError(err.message);
         } finally {
             setIsProcessing(false);
         }
     }, [originalImage]);
 
-    return {
-        originalImage,
-        processedImage,
-        isProcessing,
-        error,
-        setOriginalImage,
-        handleImageUpload,
-        generate,
-        reset
-    };
+    return { originalImage, processedImage, isProcessing, error, setOriginalImage, handleImageUpload, generate, reset };
 };

@@ -33,4 +33,10 @@ export const TOOLS = [
     { id: 'old-photo-restorer', title: 'Restaurador de Fotos Antigas IA', imageUrl: 'https://images.unsplash.com/photo-1471341932139-99745a4a4d6f?w=150&h=150&fit=crop&q=80', category: 'Restauração e Aprimoramento IA' },
     { id: 'watermark-remover', title: 'Remover Marca D\'água IA', imageUrl: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=150&h=150&fit=crop&q=80', category: 'Restauração e Aprimoramento IA' },
     { id: 'ai-replace', title: 'Substituir Objeto com IA', imageUrl: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=150&h=150&fit=crop&q=80', category: 'Restauração e Aprimoramento IA' },
+    {id: 'art-extractor', 
+    title: 'Extrair Estampa (DTF)', 
+    imageUrl: 'https://images.unsplash.com/photo-1562157873-818bc0726f68?w=150&h=150&fit=crop', 
+    category: 'Restauração e Aprimoramento IA', 
+    isNew: true 
+},
 ];
