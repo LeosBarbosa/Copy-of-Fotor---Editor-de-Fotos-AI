@@ -1,7 +1,6 @@
-
 import React from 'react';
 import { Plus, ChevronDown, Cloud, Search, Download, CircleUserRound, Menu, LayoutPanelLeft, Layers } from 'lucide-react';
-import { GlobalSearch } from '../../features/global-search/GlobalSearch';
+import { GlobalSearch } from '../GlobalSearch.tsx';
 
 export const Header: React.FC<{
   onMenuToggle?: () => void;
@@ -32,7 +31,7 @@ export const Header: React.FC<{
         </div>
         <div className="relative hidden lg:block">
           <button className="flex items-center gap-2 px-3 py-2 bg-[#3a3a3a] rounded-md hover:bg-gray-600/50 transition-colors border border-transparent hover:border-gray-600">
-            <span className="font-semibold text-sm">Editor de fotos AI</span>
+            <span className="font-semibold text-sm">Editor de fotos IA</span>
             <ChevronDown size={16} className="text-gray-400" />
           </button>
         </div>

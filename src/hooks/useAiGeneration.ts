@@ -1,7 +1,6 @@
-
 import { useState, useCallback } from 'react';
-import { aiService } from '../services/aiService';
-import { fileToBlobUrl } from '../utils/fileUtils';
+import { aiService } from '../services/aiService.ts';
+import { fileToBlobUrl } from '../utils/fileUtils.ts';
 
 interface UseAiGenerationReturn {
     originalImage: string | null;
@@ -35,7 +34,6 @@ export const useAiGeneration = (initialImage: string | null = null): UseAiGenera
     }, []);
 
     const generate = useCallback(async (prompt: string, options: { model?: string, additionalImages?: string[], systemInstruction?: string, imageOverride?: string } = {}) => {
-        // Permite que uma ferramenta substitua a imagem principal (ex: Stitch usa o template como base)
         const imgToUse = options.imageOverride || originalImage;
 
         if (!imgToUse) {

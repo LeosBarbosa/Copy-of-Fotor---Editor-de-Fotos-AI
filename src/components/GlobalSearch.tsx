@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Search, Sparkles, ChevronRight } from 'lucide-react';
-import { TOOLS } from '../data/tools';
+import { TOOLS } from '../data/tools.ts';
 
 interface GlobalSearchProps {
     onToolSelect: (toolId: string) => void;

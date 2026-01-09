@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, useNavigate, useParams, Navigate } from '
 import EditorInterface from './components/EditorInterface.tsx';
 import { EditorProvider, useEditor } from './contexts/EditorContext.tsx';
 
-// Import screens with explicit extensions for browser compatibility
+// Import screens using clean relative paths with extensions
 import { UpscalerScreen } from './screens/UpscalerScreen.tsx';
 import { PortraitScreen } from './screens/features/portrait/PortraitScreen.tsx';
 import { NoiseRemoverScreen } from './screens/NoiseRemoverScreen.tsx';

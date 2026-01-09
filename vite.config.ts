@@ -7,7 +7,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default defineConfig(({ mode }) => {
-    const env = loadEnv(mode, process.cwd(), '');
+    // Fix: Using __dirname instead of process.cwd() to resolve the "Property 'cwd' does not exist on type 'Process'" error.
+    // __dirname is already calculated correctly above for this ESM environment.
+    const env = loadEnv(mode, __dirname, '');
     
     return {
       server: {

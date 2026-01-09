@@ -1,5 +1,7 @@
 {
-  "name": "Copy of Copy of Fotor - Editor de Fotos AI",
+  "name": "Fotor - Editor de Fotos AI",
   "description": "Um editor de fotos online 'tudo-em-um' potencializado por Inteligência Artificial, oferecendo uma suíte de ferramentas para restaurar, aprimorar e transformar fotos com resultados profissionais em segundos.",
-  "requestFramePermissions": []
+  "requestFramePermissions": [
+    "camera"
+  ]
 }
